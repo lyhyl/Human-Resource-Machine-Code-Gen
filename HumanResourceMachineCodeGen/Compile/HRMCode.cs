@@ -15,5 +15,6 @@ namespace HumanResourceMachineCodeGen.Compile
             Instruction = ins;
             Param = p;
         }
+        public override string ToString() => $"{{{Instruction},{Param}}}";
     }
 }

@@ -8,6 +8,8 @@
         public static string UndefinedVariable(string v)
             => $"Undefined variable `{v}`";
 
+        public static readonly string InvailedBC = "break/continue must inside while block";
+
         public static readonly string EmptyExpression = "Empty expression is not allowed";
         public static readonly string InvailedExpression = "Invailed expression";
 

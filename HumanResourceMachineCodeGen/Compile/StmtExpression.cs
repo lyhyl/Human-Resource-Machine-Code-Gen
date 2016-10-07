@@ -135,7 +135,7 @@ namespace HumanResourceMachineCodeGen.Compile
                     return 1;
                 if (b.Variable == "hand")
                     return -1;
-                return (a.Positive ? 1 : 0) + (b.Positive ? -1 : 0);
+                return (a.Positive ? -1 : 0) + (b.Positive ? 1 : 0);
             });
             if (elements.Count == 0)
             {

@@ -1,12 +1,9 @@
 ﻿using HumanResourceMachineCodeGen.Compile;
+using HumanResourceMachineCodeGen.Optimize;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HumanResourceMachineCodeGen
@@ -54,7 +51,7 @@ namespace HumanResourceMachineCodeGen
             sb.AppendLine("-- HUMAN RESOURCE MACHINE PROGRAM --");
             foreach (var code in opt)
             {
-                string dest = code.Param > 0 ? $"{code.Param}" : $"[{-code.Param}]";
+                string dest = code.Param > 0 ? $"{code.Param - 1}" : $"[{-code.Param - 1}]";
                 string lab = GetLabel(code.Param);
                 const int codePadding = -9;
                 switch (code.Instruction)
@@ -104,7 +101,8 @@ namespace HumanResourceMachineCodeGen
 
         private List<HRMCode> Optimize(List<HRMCode> ass)
         {
-            List<HRMCode> opt = new List<HRMCode>(ass);
+            List<HRMCode> opt;
+            DefaultOptimizer.ForceOptimize(ass, out opt);
             return opt;
         }
 
@@ -123,5 +121,45 @@ namespace HumanResourceMachineCodeGen
         {
             Generate();
         }
+
+        private void textBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+                switch (e.KeyCode)
+                {
+                    case Keys.A:
+                        (sender as TextBox)?.SelectAll();
+                        break;
+                    case Keys.S:
+                        SaveFile();
+                        break;
+                    case Keys.O:
+                        OpenFile();
+                        break;
+                    case Keys.N:
+                        codeBox.Text = "";
+                        break;
+                }
+        }
+
+        private void SaveFile()
+        {
+            SaveFileDialog diag = new SaveFileDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+                using (StreamWriter sw = new StreamWriter(diag.FileName))
+                    sw.Write(codeBox.Text);
+        }
+
+        private void OpenFile()
+        {
+            OpenFileDialog diag = new OpenFileDialog();
+            if (diag.ShowDialog() == DialogResult.OK)
+                using (StreamReader sr = new StreamReader(diag.FileName))
+                    codeBox.Text = sr.ReadToEnd();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e) => OpenFile();
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e) => SaveFile();
     }
 }

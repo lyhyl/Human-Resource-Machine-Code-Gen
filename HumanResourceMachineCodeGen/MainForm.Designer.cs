@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
@@ -44,6 +45,7 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.generateToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -52,11 +54,19 @@
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.openToolStripMenuItem.Text = "&Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // generateToolStripMenuItem
             // 
@@ -90,8 +100,10 @@
             this.codeBox.Location = new System.Drawing.Point(0, 0);
             this.codeBox.Multiline = true;
             this.codeBox.Name = "codeBox";
+            this.codeBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.codeBox.Size = new System.Drawing.Size(150, 237);
             this.codeBox.TabIndex = 0;
+            this.codeBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
             // 
             // genBox
             // 
@@ -101,8 +113,10 @@
             this.genBox.Multiline = true;
             this.genBox.Name = "genBox";
             this.genBox.ReadOnly = true;
+            this.genBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.genBox.Size = new System.Drawing.Size(130, 237);
             this.genBox.TabIndex = 0;
+            this.genBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_KeyDown);
             // 
             // MainForm
             // 
@@ -136,6 +150,7 @@
         private System.Windows.Forms.TextBox codeBox;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
     }
 }
 

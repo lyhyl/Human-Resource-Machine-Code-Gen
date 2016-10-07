@@ -25,6 +25,11 @@ namespace HumanResourceMachineCodeGen.Compile
 
         public void Emit(List<HRMCode> codes, Dictionary<string, int> vtab, CompileTimeVars ctv)
         {
+            HashSet<int> prevBreakJmp = ctv.BreakLoopJump;
+            HashSet<int> prevContinueJmp = ctv.ContinueLoopJump;
+            ctv.BreakLoopJump = new HashSet<int>();
+            ctv.ContinueLoopJump = new HashSet<int>();
+
             if(cond.IsConstantExpression)
             {
                 if(cond.ConstantResult)
@@ -32,7 +37,11 @@ namespace HumanResourceMachineCodeGen.Compile
                     int jmpLab = ctv.JumpLabel++;
                     codes.Add(new HRMCode(HRMInstr.Lab, jmpLab));
                     loop.Emit(codes, vtab, ctv);
+                    foreach (var cj in ctv.ContinueLoopJump)
+                        codes.Add(new HRMCode(HRMInstr.Lab, cj));
                     codes.Add(new HRMCode(HRMInstr.Jmp, jmpLab));
+                    foreach (var bkj in ctv.BreakLoopJump)
+                        codes.Add(new HRMCode(HRMInstr.Lab, bkj));
                 }
             }
             else
@@ -42,6 +51,9 @@ namespace HumanResourceMachineCodeGen.Compile
                 else
                     EmitRel(codes, vtab, ctv);
             }
+
+            ctv.BreakLoopJump = prevBreakJmp;
+            ctv.ContinueLoopJump = prevContinueJmp;
         }
 
         private void EmitEqu(List<HRMCode> codes, Dictionary<string, int> vtab, CompileTimeVars ctv)
@@ -54,8 +66,12 @@ namespace HumanResourceMachineCodeGen.Compile
                 int jzLab = ctv.JumpLabel++;
                 codes.Add(new HRMCode(HRMInstr.Jz, jzLab));
                 loop.Emit(codes, vtab, ctv);
+                foreach (var cj in ctv.ContinueLoopJump)
+                    codes.Add(new HRMCode(HRMInstr.Lab, cj));
                 codes.Add(new HRMCode(HRMInstr.Jmp, jmpLab));
                 codes.Add(new HRMCode(HRMInstr.Lab, jzLab));
+                foreach (var bkj in ctv.BreakLoopJump)
+                    codes.Add(new HRMCode(HRMInstr.Lab, bkj));
             }
             else
             {
@@ -68,8 +84,12 @@ namespace HumanResourceMachineCodeGen.Compile
                 codes.Add(new HRMCode(HRMInstr.Jmp, joutLab));
                 codes.Add(new HRMCode(HRMInstr.Lab, jzLab));
                 loop.Emit(codes, vtab, ctv);
+                foreach (var cj in ctv.ContinueLoopJump)
+                    codes.Add(new HRMCode(HRMInstr.Lab, cj));
                 codes.Add(new HRMCode(HRMInstr.Jmp, jmpLab));
                 codes.Add(new HRMCode(HRMInstr.Lab, joutLab));
+                foreach (var bkj in ctv.BreakLoopJump)
+                    codes.Add(new HRMCode(HRMInstr.Lab, bkj));
             }
         }
 
@@ -87,10 +107,14 @@ namespace HumanResourceMachineCodeGen.Compile
                 codes.Add(new HRMCode(HRMInstr.Jz, jzLab));
             }
             loop.Emit(codes, vtab, ctv);
+            foreach (var cj in ctv.ContinueLoopJump)
+                codes.Add(new HRMCode(HRMInstr.Lab, cj));
             codes.Add(new HRMCode(HRMInstr.Jmp, jmpLab));
             if (!cond.Comparer.Contains("="))
                 codes.Add(new HRMCode(HRMInstr.Lab, jzLab));
             codes.Add(new HRMCode(HRMInstr.Lab, jnLab));
+            foreach (var bkj in ctv.BreakLoopJump)
+                codes.Add(new HRMCode(HRMInstr.Lab, bkj));
         }
     }
 }

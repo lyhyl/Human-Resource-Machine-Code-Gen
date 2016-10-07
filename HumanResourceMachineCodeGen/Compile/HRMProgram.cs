@@ -39,6 +39,7 @@ namespace HumanResourceMachineCodeGen.Compile
                         throw new CompileException(ErrorHelper.BadAddress);
                     if (s < 0)
                         throw new CompileException(ErrorHelper.BadAddress);
+                    s++;
                     token = parser.GetNextToken();
                     if (token != ")")
                         throw new CompileException(ErrorHelper.Unexpected("(", token));
