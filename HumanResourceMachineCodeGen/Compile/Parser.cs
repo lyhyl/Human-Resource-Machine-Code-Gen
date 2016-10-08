@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HumanResourceMachineCodeGen.Compile
+﻿namespace HumanResourceMachineCodeGen.Compile
 {
     public class Parser
     {
@@ -21,7 +15,7 @@ namespace HumanResourceMachineCodeGen.Compile
             code = co;
         }
 
-        private bool IsBlank(char c)
+        private bool IsBlankChar(char c)
         {
             return c == ' ' || c == '\t' || c == '\n' || c == '\r';
         }
@@ -31,12 +25,12 @@ namespace HumanResourceMachineCodeGen.Compile
             return c == '*' || c == '_' || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
         }
 
-        private bool IsDigit(char c)
+        private bool IsDigitChar(char c)
         {
             return '0' <= c && c <= '9';
         }
 
-        private bool IsOperator(char c)
+        private bool IsOperatorChar(char c)
         {
             return c == '>' || c == '<' || c == '=' || c == '!' || c == '+' || c == '-';
         }
@@ -49,7 +43,7 @@ namespace HumanResourceMachineCodeGen.Compile
         public string GetNextToken(bool movePos = true)
         {
             int be = position;
-            while (be < code.Length && IsBlank(code[be]))
+            while (be < code.Length && IsBlankChar(code[be]))
                 be++;
             if (be == code.Length)
                 return "";
@@ -59,14 +53,14 @@ namespace HumanResourceMachineCodeGen.Compile
                 while (en < code.Length && IsVarChar(code[en]))
                     en++;
             }
-            else if (IsOperator(code[be]))
+            else if (IsOperatorChar(code[be]))
             {
-                while (en < code.Length && IsOperator(code[en]))
+                while (en < code.Length && IsOperatorChar(code[en]))
                     en++;
             }
-            else if (IsDigit(code[be]))
+            else if (IsDigitChar(code[be]))
             {
-                while (en < code.Length && IsDigit(code[en]))
+                while (en < code.Length && IsDigitChar(code[en]))
                     en++;
             }
             string token = code.Substring(be, en - be);

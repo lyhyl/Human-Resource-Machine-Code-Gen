@@ -14,6 +14,14 @@ namespace HumanResourceMachineCodeGen.Compile
                 Positive = pos;
                 Variable = var;
             }
+            public bool IsSame(Element e)
+            {
+                return Positive == e.Positive && Variable == e.Variable;
+            }
+            public bool IsNegative(Element e)
+            {
+                return Positive != e.Positive && Variable == e.Variable;
+            }
         }
 
         private List<Element> elements = new List<Element>();
@@ -46,6 +54,16 @@ namespace HumanResourceMachineCodeGen.Compile
 
             ConvertToStandardFormat(raw);
             ReductElement();
+            if (elements.Count == 0)
+            {
+                IsConstantExpression = true;
+                if (Comparer == "==")
+                    ConstantResult = true;
+                else if (Comparer == "!=")
+                    ConstantResult = false;
+                else
+                    ConstantResult = Comparer.Contains("=");
+            }
             if (elements.Count > 0 && elements[0].Variable == "hand" && !elements[0].Positive)
             {
                 RequireSwitchLogic = true;
@@ -74,7 +92,25 @@ namespace HumanResourceMachineCodeGen.Compile
 
         private void ReductElement()
         {
-            // TODO
+            HashSet<int> elems = new HashSet<int>();
+            for (int i = 0; i < elements.Count; i++)
+            {
+                if (elems.Contains(i))
+                    continue;
+                for (int j = i + 1; j < elements.Count; j++)
+                {
+                    if (elems.Contains(j))
+                        continue;
+                    if (elements[i].IsNegative(elements[j]))
+                    {
+                        elems.Add(i);
+                        elems.Add(j);
+                        break;
+                    }
+                }
+            }
+            foreach (var idx in elems.OrderByDescending(e => e))
+                elements.RemoveAt(idx);
         }
 
         /// <summary>
@@ -137,16 +173,6 @@ namespace HumanResourceMachineCodeGen.Compile
                     return -1;
                 return (a.Positive ? -1 : 0) + (b.Positive ? 1 : 0);
             });
-            if (elements.Count == 0)
-            {
-                IsConstantExpression = true;
-                if (Comparer == "==")
-                    ConstantResult = true;
-                else if (Comparer == "!=")
-                    ConstantResult = false;
-                else
-                    ConstantResult = Comparer.Contains("=");
-            }
         }
 
         private bool IsZeroVariable(List<Element> elems)

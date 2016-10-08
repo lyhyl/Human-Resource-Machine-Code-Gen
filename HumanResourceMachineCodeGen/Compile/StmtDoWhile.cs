@@ -1,22 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HumanResourceMachineCodeGen.Compile
 {
-    public class StmtWhile : Emitter
+    public class StmtDoWhile : Emitter
     {
         private StmtExpression cond;
         private StmtBlock loop;
 
-        public StmtWhile(Parser parser)
+        public StmtDoWhile(Parser parser)
         {
+            loop = new StmtBlock(parser);
             string token = parser.GetNextToken();
+            if (token != "while")
+                throw new CompileException(ErrorHelper.Unexpected("while", token));
+            token = parser.GetNextToken();
             if (token != "(")
                 throw new CompileException(ErrorHelper.Unexpected("(", token));
             cond = new StmtExpression(parser);
             token = parser.GetNextToken();
             if (token != ")")
                 throw new CompileException(ErrorHelper.Unexpected(")", token));
-            loop = new StmtBlock(parser);
+            token = parser.GetNextToken();
+            if (token != ";")
+                throw new CompileException(ErrorHelper.Unexpected(";", token));
         }
 
         public void Emit(List<HRMCode> codes, Dictionary<string, int> vtab, CompileTimeVars ctv)
@@ -26,9 +36,9 @@ namespace HumanResourceMachineCodeGen.Compile
             ctv.BreakLoopJump = new HashSet<int>();
             ctv.ContinueLoopJump = new HashSet<int>();
 
-            if(cond.IsConstantExpression)
+            if (cond.IsConstantExpression)
             {
-                if(cond.ConstantResult)
+                if (cond.ConstantResult)
                 {
                     int jmpLab = ctv.JumpLabel++;
                     codes.Add(new HRMCode(HRMInstr.Lab, jmpLab));
@@ -39,13 +49,21 @@ namespace HumanResourceMachineCodeGen.Compile
                     foreach (var bkj in ctv.BreakLoopJump)
                         codes.Add(new HRMCode(HRMInstr.Lab, bkj));
                 }
+                else
+                {
+                    loop.Emit(codes, vtab, ctv);
+                    foreach (var cj in ctv.ContinueLoopJump)
+                        codes.Add(new HRMCode(HRMInstr.Lab, cj));
+                    foreach (var bkj in ctv.BreakLoopJump)
+                        codes.Add(new HRMCode(HRMInstr.Lab, bkj));
+                }
             }
             else
             {
-                if (cond.Comparer == "==" || cond.Comparer == "!=")
-                    EmitEqu(codes, vtab, ctv);
-                else
-                    EmitRel(codes, vtab, ctv);
+                //if (cond.Comparer == "==" || cond.Comparer == "!=")
+                //    EmitEqu(codes, vtab, ctv);
+                //else
+                //    EmitRel(codes, vtab, ctv);
             }
 
             ctv.BreakLoopJump = prevBreakJmp;

@@ -1,21 +1,108 @@
-﻿String Reverse(Two stars)
+﻿=== Prime Factory ===
+var zero(24),n,nn,div,f;
+{
+	while(0==0)
+	{
+		f=zero;
+		f++;
+		f++;
+		read(n);
+		while(n>=f)
+		{
+			nn=n;
+			div=zero;
+			while(nn>=f)
+			{
+				nn=nn-f;
+				div++;
+			}
+			if(nn)
+			{
+				f++;
+			}
+			else
+			{
+				n=div;
+				write(f);
+			}
+		}
+	}
+}
 
+=== gen ===
 -- HUMAN RESOURCE MACHINE PROGRAM --
-
-a:
-b:
-    INBOX   
-    JUMPZ    c
-    COPYTO   [14]
-    BUMPUP   14
-    JUMP     b
 c:
+    COPYFROM 24
+    COPYTO   3
+    BUMPUP   3
+    BUMPUP   3
+    INBOX    
+    COPYTO   0
+g:
+b:
+    COPYFROM 0
+    SUB      3
+    JUMPN    c
+    COPYFROM 0
+    COPYTO   1
+    COPYFROM 24
+    COPYTO   2
 d:
-    BUMPDN   14
-    COPYFROM [14]
-    OUTBOX  
-    COPYFROM 14
-    JUMPZ    a
+    COPYFROM 1
+    SUB      3
+    JUMPN    e
+    COPYFROM 1
+    SUB      3
+    COPYTO   1
+    BUMPUP   2
     JUMP     d
+e:
+    COPYFROM 1
+    JUMPZ    f
+    BUMPUP   3
+    JUMP     g
+f:
+    COPYFROM 2
+    COPYTO   0
+    COPYFROM 3
+    OUTBOX   
+    JUMP     b
 
-
+=== Sort ===
+var zero(24),cnt(23),i(22),j(21),t(20);
+{
+	while(0==0)
+	{
+		cnt=zero;
+		read(*cnt);
+		while(*cnt)
+		{
+			cnt++;
+			read(*cnt);
+		}
+		i=zero;
+		cnt--;
+		while(cnt>=i)
+		{
+			j=i;
+			j++;
+			while(cnt>=j)
+			{
+				if(*i>=*j)
+				{
+					t=*i;
+					*i=*j;
+					*j=t;
+				}
+				j++;
+			}
+			i++;
+		}
+		i=zero;
+		while(*i)
+		{
+			write(*i);
+			i++;
+		}
+	}
+}

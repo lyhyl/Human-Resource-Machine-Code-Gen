@@ -1,9 +1,6 @@
 ﻿using HumanResourceMachineCodeGen.Compile;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HumanResourceMachineCodeGen.Optimize
 {
@@ -36,7 +33,7 @@ namespace HumanResourceMachineCodeGen.Optimize
             return optimized;
         }
 
-        private static bool EmptyJmp(List<HRMCode> codes, out List<HRMCode> opt)
+        private static bool EmptyJmp2(List<HRMCode> codes, out List<HRMCode> opt)
         {
             bool done = false;
             opt = new List<HRMCode>(codes);
@@ -65,6 +62,36 @@ namespace HumanResourceMachineCodeGen.Optimize
                 else
                     i--;
             }
+            return done;
+        }
+
+        private static bool EmptyJmp(List<HRMCode> codes, out List<HRMCode> opt)
+        {
+            bool done = false;
+            List<HRMCode> tmp = new List<HRMCode>(codes);
+            for (int i = 0; i < tmp.Count; )
+            {
+                if (tmp[i].Instruction == HRMInstr.Jmp ||
+                    tmp[i].Instruction == HRMInstr.Jn ||
+                    tmp[i].Instruction == HRMInstr.Jz)
+                {
+                    int tar = tmp.FindIndex(c => c.Instruction == HRMInstr.Lab && c.Param == tmp[i].Param);
+                    int from = Math.Min(i, tar), to = Math.Max(i, tar);
+                    int x = tmp.FindIndex(from + 1, c => c.Instruction != HRMInstr.Lab);
+                    if (from < x && x < to)
+                        i++;
+                    else
+                    {
+                        tmp.RemoveAt(to);
+                        tmp.RemoveAt(from);
+                        done = true;
+                        i = 0;
+                    }
+                }
+                else
+                    i++;
+            }
+            opt = tmp;
             return done;
         }
 

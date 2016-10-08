@@ -20,6 +20,9 @@ namespace HumanResourceMachineCodeGen.Compile
                     case "if":
                         stmt = new StmtIfElse(parser);
                         break;
+                    case "do":
+                        stmt = new StmtDoWhile(parser);
+                        break;
                     case "while":
                         stmt = new StmtWhile(parser);
                         break;

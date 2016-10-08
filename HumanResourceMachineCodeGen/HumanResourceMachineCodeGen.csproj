@@ -57,6 +57,7 @@
     <Compile Include="Compile\StmtBuildInFunc.cs" />
     <Compile Include="Compile\StmtContinue.cs" />
     <Compile Include="Compile\StmtDec.cs" />
+    <Compile Include="Compile\StmtDoWhile.cs" />
     <Compile Include="Compile\StmtIfElse.cs" />
     <Compile Include="Compile\StmtInc.cs" />
     <Compile Include="MainForm.cs">
@@ -73,7 +74,6 @@
     <Compile Include="Compile\StmtExpression.cs" />
     <Compile Include="Compile\HRMInstr.cs" />
     <Compile Include="Compile\HRMProgram.cs" />
-    <Compile Include="Compile\Variable.cs" />
     <Compile Include="Compile\StmtWhile.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
