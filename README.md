@@ -1,35 +1,35 @@
 # Human-Resource-Machine-Code-Gen
 
-#Read Sample XD
+## Read Sample XD
 
-#Declare variable
+## Declare variable
 
 use `var x(y)` to bind variable `x` to address of `y`
 
 use `var x` to declare variable `x` with auto-assign address
 
-#Use variable
+## Use variable
 
 `a` just use it
 
 `*a` use it as address
 
-#Flow control
+## Flow control
 
 you can use if-else(no elseif), while, break, continue
 
-#Assignment
+## Assignment
 
 you can use `a = expression`, `a++`, `a--`
 
-#Operator
+## Operator
 
 you can use `+`, `-`
 
-#Compare
+## Compare
 
 you can use `>`, `<`, `>=`, `<=`, `==`, `!=`
 
-#IO
+## IO
 
 build-in function `read(x)`, `write(x)`
