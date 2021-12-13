@@ -2,6 +2,14 @@
 
 ## Read Sample XD
 
+```
+var x;
+{
+	read(x);
+	write(x);
+}
+```
+
 ## Declare variable
 
 use `var x(y)` to bind variable `x` to address of `y`
